@@ -44,7 +44,7 @@ cd /mnt/gentoo
 
 #Download a stage3 archive
 while true; do
-        wget http://distfiles.gentoo.org/releases/amd64/current-stage3/stage3-amd64-20111208.tar.bz2 && > gotstage3
+        wget http://distfiles.gentoo.org/releases/amd64/current-stage3/stage3-amd64-20120621.tar.bz2 && > gotstage3
         if [ -f "gotstage3" ]
         then
 		break
@@ -78,7 +78,7 @@ cp -L /etc/resolv.conf /mnt/gentoo/etc/
 echo "env-update && source /etc/profile" | chroot /mnt/gentoo /bin/bash -
 
 # Get the kernel sources
-echo "emerge =sys-kernel/gentoo-sources-2.6.39-r3" | chroot /mnt/gentoo /bin/bash -
+echo "emerge =sys-kernel/gentoo-sources-3.2.21" | chroot /mnt/gentoo /bin/bash -
 
 # We will use genkernel to automate the kernel compilation
 # http://www.gentoo.org/doc/en/genkernel.xml
@@ -91,10 +91,10 @@ cat <<GRUBCONF > /boot/grub/grub.conf
 default 0
 timeout 1
 
-title=Gentoo Linux (2.6.39-gentoo-r3)
+title=Gentoo Linux (3.2.21)
 root (hd0,0)
-kernel /boot/kernel-genkernel-x86_64-2.6.39-gentoo-r3 root=/dev/ram0 real_root=/dev/sda3
-initrd /boot/initramfs-genkernel-x86_64-2.6.39-gentoo-r3
+kernel /boot/kernel-genkernel-x86_64-3.2.21-gentoo root=/dev/ram0 real_root=/dev/sda3
+initrd /boot/initramfs-genkernel-x86_64-3.2.21-gentoo
 GRUBCONF
 EOF
 
@@ -173,8 +173,8 @@ chroot /mnt/gentoo chown -R vagrant /home/vagrant/.ssh
 chroot /mnt/gentoo emerge git curl gcc automake  m4
 chroot /mnt/gentoo emerge libiconv readline zlib openssl curl git libyaml sqlite libxslt
 echo "bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)"| chroot /mnt/gentoo /bin/bash -
-echo "/usr/local/rvm/bin/rvm install ruby-1.8.7 "| chroot /mnt/gentoo sh -
-echo "/usr/local/rvm/bin/rvm use ruby-1.8.7 --default "| chroot /mnt/gentoo sh -
+echo "/usr/local/rvm/bin/rvm install ruby-1.9.2 "| chroot /mnt/gentoo sh -
+echo "/usr/local/rvm/bin/rvm use ruby-1.9.2 --default "| chroot /mnt/gentoo sh -
 
 #Installing chef & Puppet
 echo ". /usr/local/rvm/scripts/rvm ; gem install chef --no-ri --no-rdoc"| chroot /mnt/gentoo sh -
@@ -188,15 +188,15 @@ echo "echo '. /usr/local/rvm/scripts/rvm' >> /etc/bash/bash.rc" | chroot /mnt/ge
 VBOX_VERSION=$(cat /root/.vbox_version)
 
 #Kernel headers
-echo "emerge =sys-kernel/linux-headers-2.6.39" | chroot /mnt/gentoo /bin/bash -
+echo "emerge =sys-kernel/linux-headers-3.4-r2" | chroot /mnt/gentoo /bin/bash -
 
 #Installing the virtualbox guest additions
 cat <<EOF | chroot /mnt/gentoo /bin/bash -
 mkdir /etc/portage
 cat <<KEYWORDSEOF > /etc/portage/package.keywords
-=app-emulation/virtualbox-guest-additions-4.1.6-r1
+=app-emulation/virtualbox-guest-additions-4.1.12
 KEYWORDSEOF
-emerge =app-emulation/virtualbox-guest-additions-4.1.6-r1
+emerge =app-emulation/virtualbox-guest-additions-4.1.12
 rc-update add virtualbox-guest-additions default
 EOF
 
